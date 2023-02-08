@@ -1,0 +1,45 @@
+<?php
+if(isset($_POST["submit"])){
+
+$dbname ="blog";
+$tabname = "user";
+$servername="localhost";
+$password="";
+$user = "root";
+
+$uname = $_POST["uname"];
+$ps = $_POST["password"];
+
+if(empty($uname && $ps)){
+
+  echo"<script>alert('do not leave any box empty')</script>";
+  die();
+}
+
+
+$con = new mysqli($servername, $user, $password, $dbname);
+
+if($con-> connect_error){
+echo "error connecting to the database";
+}
+
+
+$q = "select * from user";
+
+$res = $con->query($q);
+
+  while($row = $res->fetch_assoc()){
+      if(($row["username"] == $uname || $row["email"]==$uname) && $row["password"] == $ps){
+        $_SESSION["un"] = $row["username"];
+        $_SESSION["uid"] = $row["userid"];
+        header("Location: ../composepage/composepage.php");
+      }
+      else{
+        echo"<script>alert('username or password is wrong')</script>";
+        die();
+      }
+  }
+
+
+}
+ ?>
